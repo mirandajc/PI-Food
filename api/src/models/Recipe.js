@@ -8,5 +8,40 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull:false
+    },
+
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+
+    summary: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+
+    aggregateLikes: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+
+    healthScore:{
+      type:DataTypes.INTEGER,
+      allowNull:false
+    },
+
+    instruction:{
+      type: DataTypes.TEXT,
+      allowNull:false
+    },
+
   });
+
 };
+
