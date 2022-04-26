@@ -1,9 +1,28 @@
-const getAll = function(){
-    return{
-        result: 'stuff'
+require('dotenv').config();
+const axios = require('axios');
+const {YOUR_API_KEY} = process.env;
+
+
+const getAll = async function(){
+    
+   try{ 
+        let apiTypes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
+        
+        let dataTypes = apiTypes.data?.results.map(obj => obj.diets).join([]).split(',');
+        let diets = new Set(dataTypes);
+        let arr = Array.from(diets);
+            return arr;
+    }catch{
+        console.log(Error)
     }
+    // return{
+    //     result: 'stuff'
+    // }
 } 
+// axios o fetch en una api para que nos devuelva la info
+// return lo envia al frontend
 
 module.exports = {
-    getAll
+    getAll,
+    
 }

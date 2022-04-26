@@ -4,12 +4,10 @@ const recipesController = require('../controllers/recipes.controllers.js')
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 
-
 const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
-
 
 router.get('/types', typesController.getTypes)
 router.get('/recipes', recipesController.getRecipesByName)
