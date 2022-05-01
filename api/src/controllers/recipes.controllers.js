@@ -1,18 +1,19 @@
 const recipesService = require('../services/recipes.services')
 
-const getRecipesByName =  function(req,res,next){
+const getRecipesByName = async function(req,res,next){
     // Buscar todos las recetas que coincidan con el nombre en mi API Y DB
     // Despues devuelvo 
-    const recipes = recipesService.getAllByName(req.query.name);
-    res.send(recipes)
+    const recipes = await recipesService.getAllByName(req.query.name);
+    res.send(recipes) // tiene que devolver toda la informacion del la receta buscada
    
 }
 
-const getRecipeById =  function( req, res, next){
+const getRecipeById = async function( req, res, next){
 
 
-    const recipes = recipesService.getById( req.params.id) // informacion que nos envia el cliente que es un objeto
+    const recipes = await recipesService.getById(req.params.id) // informacion que nos envia el cliente que es un objeto
     // console.log('ID:',req.params)
+    console.log(recipes)
     res.send(recipes)
     
 }

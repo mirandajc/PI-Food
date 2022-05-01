@@ -16,3 +16,5 @@ const getTypes = async function(req, res, next){
 module.exports = {
     getTypes
 }
+
+//separar bien los services y controllers
