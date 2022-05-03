@@ -1,10 +1,21 @@
-//const {Recipe} = require('../db')
+require('dotenv').config();
+const {Recipe} = require('../db')
 const axios = require('axios');
+const { Sequelize } = require('sequelize');
 const {YOUR_API_KEY} = process.env;
 
 const getAllByName = async function(name){
 // falta consultar en mi db el nombre
-    const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
+let findDbByName = await Recipe.findAll({ 
+                    where: 
+                        {name: Sequelize.where( Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + name + '%')},
+                    raw: true
+                })
+
+                    console.log(findDbByName)
+
+
+     const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
   
     let recipesInfo = apiInfoRecipes.data?.results.map(element =>
          { return {
@@ -22,8 +33,10 @@ const getAllByName = async function(name){
             if(recipe.name.includes(name)) return recipe
         })
     }
+
+   
     
-    return searchByName(name)
+    return searchByName(name) 
 }
 
 const getById = async function(id){
