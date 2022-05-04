@@ -6,17 +6,9 @@ const {YOUR_API_KEY} = process.env;
 
 const getAllByName = async function(name){
 // falta consultar en mi db el nombre
-let findDbByName = await Recipe.findAll({ 
-                    where: 
-                        {name: Sequelize.where( Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + name + '%')},
-                    raw: true
-                })
-
-                    console.log(findDbByName)
-
 
      const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
-  
+     
     let recipesInfo = apiInfoRecipes.data?.results.map(element =>
          { return {
             id: element.id, 
@@ -28,15 +20,20 @@ let findDbByName = await Recipe.findAll({
             // healthScore: element.healthScore,
             // instruction: element.analyzedInstructions[0]?.steps?.map(item => { return item.step + item.step}).toString(),
          }});
+       
     let searchByName = (name)=>{
         return recipesInfo.filter(recipe => {
             if(recipe.name.includes(name)) return recipe
         })
     }
-
    
-    
-    return searchByName(name) 
+    let dbByName = await Recipe.findAll({ 
+        where: 
+            {name: Sequelize.where( Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + name + '%')},
+        raw: true
+        })
+    let allRecipe = searchByName(name).concat(dbByName);
+    return allRecipe
 }
 
 const getById = async function(id){
