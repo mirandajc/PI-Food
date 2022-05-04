@@ -38,7 +38,7 @@ const getAllByName = async function(name){
 
 const getById = async function(id){
     
-   const apiById = await axios.get( `https://api.spoonacular.com/recipes/${id}/information?apiKey=${YOUR_API_KEY}`)
+   try {const apiById = await axios.get( `https://api.spoonacular.com/recipes/${id}/information?apiKey=${YOUR_API_KEY}`)
  
     let dataByApi = apiById.data;
     let datosByApi = (dataByApi)=>{
@@ -53,8 +53,20 @@ const getById = async function(id){
             instruction: dataByApi.instructions
        }
     }
-
     return datosByApi(dataByApi)
+} catch{
+    console.log(Error, 'No se encontro en Api')
+}
+try{
+    let dataByDb = await Recipe.findByPk(id,{ raw: true });
+    return dataByDb
+}catch{
+    console.log(Error, 'No se encontro en Api')
+}
+
+// si no pasa en api buscar en db ordenar
+        // 
+
 //    let detailsOfRecipes = apiById.data.map(element =>
 //     { return {
 //        id: element.id, 
