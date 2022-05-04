@@ -18,16 +18,9 @@ const getRecipeById = async function( req, res, next){
     
 }
 
-const createRecipe =  function( req, res, next){
+const createRecipe = async function( req, res, next){
     // si no encuentro la receta creada en el api o en mi base de datos recien lo voy a crear
-    const recipe =  recipesService.create({
-        name: req.body.name,
-        image: req.body.image,
-        summary: req.body.summary,
-        aggregateLikes: req.body.aggregateLikes,
-        healthScore: req.body.healthScore,
-        instruction: req.body.instruction,
-    })
+    const recipe = await  recipesService.create(req.body)
     // console.log("Details:",req.body.details)
     console.log(recipe)
     res.status(201).send(recipe)

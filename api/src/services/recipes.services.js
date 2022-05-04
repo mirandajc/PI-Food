@@ -81,10 +81,18 @@ try{
     // console.log(detailsOfRecipes)
 }
 
-const create = function(recipe){
-    return{  
-        recipe
-    }
+const create = async function( recipe ){
+    //const {name, image, summary, aggregateLikes, healthScore, instruction} = req.body;
+    let newRecipe = await Recipe.create({
+        name: recipe.name,
+        image: recipe.image,
+        summary: recipe.summary,
+        spoonacularScore: recipe.spoonacularScore,
+        aggregateLikes: recipe.aggregateLikes,
+        healthScore: recipe.healthScore,
+        instruction: recipe.instruction
+    })
+    return newRecipe
 }
 module.exports = {
     getAllByName,
