@@ -10,11 +10,14 @@ const getRecipesByName = async function(req,res,next){
 
 const getRecipeById = async function( req, res, next){
 
-
-    const recipes = await recipesService.getById(req.params.id) // informacion que nos envia el cliente que es un objeto
-    // console.log('ID:',req.params)
-    console.log(recipes)
-    res.send(recipes)
+try{const recipes = await recipesService.getById(req.params.id) // informacion que nos envia el cliente que es un objeto
+// console.log('ID:',req.params)
+console.log(recipes)
+res.send(recipes)
+}catch{
+    res.status(404).send('No encontramos tu receta')
+}
+    
     
 }
 
