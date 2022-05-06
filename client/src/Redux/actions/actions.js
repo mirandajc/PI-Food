@@ -1,27 +1,35 @@
 import axios from "axios";
+export const ALL_RECIPES = 'ALL_RECIPES';
+export const ALL_TYPES = 'ALL_TYPES';
 
-export default function allTypes(){
+
+function allTypes(){
     return(dispatch)=>{
         axios.get("http://localhost:3001/types")
         .then(result=>{
-            console.log(result)
             return dispatch({
-                type: "ALL_TYPES",
+                type: ALL_TYPES,
                 payload: result
             })
-        }).catch(Error=>console.log(Error))
+        })
     }
 }
 
-export default function allRecipes(){
+function allRecipes(){
    return (dispatch)=>{
     axios.get("http://localhost:3001/recipes")
     .then(result=>{
         return dispatch({
-            type: "ALL_RECIPES",
+            type: ALL_RECIPES,
             payload: result.data
         })
     }).catch(Error=>console.log(Error))
    }
 }
 
+export default {
+allTypes,
+allTypes,
+ALL_RECIPES,
+ALL_TYPES
+}

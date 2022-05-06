@@ -5,7 +5,6 @@ const getRecipesByName = async function(req,res,next){
     // Despues devuelvo 
     const recipes = await recipesService.getAllByName(req.query.name);
     res.send(recipes) // tiene que devolver toda la informacion del la receta buscada
-   
 }
 
 const getRecipeById = async function( req, res, next){
