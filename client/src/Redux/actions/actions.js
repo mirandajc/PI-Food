@@ -9,7 +9,7 @@ function allTypes(){
         .then(result=>{
             return dispatch({
                 type: ALL_TYPES,
-                payload: result
+                payload: result.data
             })
         })
     }
@@ -29,7 +29,5 @@ function allRecipes(){
 
 export default {
 allTypes,
-allTypes,
-ALL_RECIPES,
-ALL_TYPES
+allRecipes
 }
