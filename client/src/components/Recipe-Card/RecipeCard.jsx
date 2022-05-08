@@ -1,14 +1,17 @@
-import React from "react"
-import {Link} from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
+import DetailRecipe from "../Detail-Recipe/DetailRecipe";
 
+export default function RecipeCard({image ,name, type}){
 
-export default function RecipeCard(){
     return(
         <div>
+            <img src={image}alt='imagen' />
             <section>
-                <h2>Card</h2>
+                <h2>{name}</h2>
                 <Link to='/recipes/:id'>
-                <button>Detail Recipe</button>
+                <div>{type}</div>
+                <button><DetailRecipe/></button>
                 </Link>
             </section>
         </div>

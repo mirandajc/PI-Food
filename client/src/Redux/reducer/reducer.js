@@ -1,8 +1,9 @@
-import {ALL_RECIPES, ALL_TYPES} from '../actions/actions.js';
+import {ALL_RECIPES, ALL_TYPES, RECIPE_ID} from '../actions/actions.js';
 
 const initialState = {
     recipes: [],
-    types: []
+    types: [],
+    detail:[]
 }
 
 const rootReducer = (state = initialState,action)=>{
@@ -17,7 +18,12 @@ const rootReducer = (state = initialState,action)=>{
                 ...state,
                 types: action.payload
             }
-    
+        case RECIPE_ID:
+            return{
+                ...state,
+                detail: action.payload
+            }
+            
         default:
             return {...state}
     }

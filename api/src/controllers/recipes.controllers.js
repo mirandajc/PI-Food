@@ -1,5 +1,16 @@
 const recipesService = require('../services/recipes.services')
 
+const getRecipes = async function( req, res, next){
+    if(req.query.name) next()
+    else{
+    try{const recipes = await recipesService.getRecipesApiDb()
+    res.send(recipes)
+    }catch{
+        res.status(404).send('error')
+    }
+    }
+}
+
 const getRecipesByName = async function(req,res,next){
     // Buscar todos las recetas que coincidan con el nombre en mi API Y DB
     // Despues devuelvo 
@@ -31,7 +42,8 @@ const createRecipe = async function( req, res, next){
 module.exports = {
     getRecipesByName,
     getRecipeById,
-    createRecipe
+    createRecipe,
+    getRecipes
 }
 
 

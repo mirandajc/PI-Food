@@ -4,8 +4,28 @@ const axios = require('axios');
 const { Sequelize } = require('sequelize');
 const {YOUR_API_KEY} = process.env;
 
+const getRecipesApiDb = async function() {
+    const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
+    let recipesInfo = apiInfoRecipes.data?.results.map(element =>
+         { return {
+            id: element.id, 
+            name: element.title.toLowerCase().replace(/[^a-zA-Z 0-9.]+/g,''),
+            image: element.image,
+            type: element.diets.map(diet=>({name: diet}))
+            //summary: element.summary,
+            // spoonacularScore: element.spoonacularScore,
+            // healthScore: element.healthScore,
+            // instruction: element.analyzedInstructions[0]?.steps?.map(item => { return item.step + item.step}).toString(),
+         }});
+       
+        
+    let dbByName = await Recipe.findAll({raw:true});
+    
+    let allRecipe = recipesInfo.concat(dbByName);
+    return allRecipe
+}
+
 const getAllByName = async function(name){
-// falta consultar en mi db el nombre
 
      const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
      
@@ -54,6 +74,7 @@ const getById = async function(id){
        }
     }
     return datosByApi(dataByApi)
+    
 } catch{
     console.log(Error, 'No se encontro en Api')
 }
@@ -63,9 +84,6 @@ try{
 }catch{
     console.log(Error, 'No se encontro en Api')
 }
-
-// si no pasa en api buscar en db ordenar
-        // 
 
 //    let detailsOfRecipes = apiById.data.map(element =>
 //     { return {
@@ -95,6 +113,7 @@ const create = async function( recipe ){
     return newRecipe
 }
 module.exports = {
+    getRecipesApiDb,
     getAllByName,
     getById,
     create
