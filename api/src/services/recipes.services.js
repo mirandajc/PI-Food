@@ -57,6 +57,11 @@ const getAllByName = async function(name){
     return allRecipe
 }
 
+const getIdByDb = async function (recipeId){
+    let dataByDb = await Recipe.findByPk(recipeId,{ raw: true });
+    return dataByDb
+}
+
 const getById = async function(recipeId){
         
     try {
@@ -76,6 +81,7 @@ const getById = async function(recipeId){
                     instruction: dataByApi.instructions
                 }
             }
+            
             return datosByApi(dataByApi)
 
                 
@@ -84,8 +90,7 @@ const getById = async function(recipeId){
             // }
 
             // try{
-            let dataByDb = await Recipe.findByPk(id,{ raw: true });
-            return dataByDb
+            
         } else {
             console.log('Recipe ID: '+recipeId)
         }
@@ -93,18 +98,6 @@ const getById = async function(recipeId){
         console.log(error)
     }
 
-//    let detailsOfRecipes = apiById.data.map(element =>
-//     { return {
-//        id: element.id, 
-//        name: element.title.toLowerCase().replace(/[^a-zA-Z 0-9.]+/g,''),
-//        image: element.image,
-//        type: element.diets.map(diet=>({name: diet}))
-       //summary: element.summary,
-       // spoonacularScore: element.spoonacularScore,
-       // healthScore: element.healthScore,
-       // instruction: element.analyzedInstructions[0]?.steps?.map(item => { return item.step + item.step}).toString(),
-    // }});
-    // console.log(detailsOfRecipes)
 }
 
 const create = async function( recipe ){
@@ -124,5 +117,6 @@ module.exports = {
     getRecipesApiDb,
     getAllByName,
     getById,
-    create
+    create,
+    getIdByDb
 }

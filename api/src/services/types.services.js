@@ -15,9 +15,7 @@ const getAll = async function(){
     }catch{
         console.log(Error)
     }
-    // return{
-    //     result: 'stuff'
-    // }
+
 } 
 // axios o fetch en una api para que nos devuelva la info
 // return lo envia al frontend

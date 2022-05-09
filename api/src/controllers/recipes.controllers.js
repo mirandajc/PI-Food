@@ -23,14 +23,16 @@ const getRecipeById = async function( req, res, next){
     else {
      try{
     if(req.params.id) {
-        const recipes = await recipesService.getById(req.params.id) // informacion que nos envia el cliente que es un objeto
-        // console.log('ID:',req.params)
-        console.log(recipes)
-        res.send(recipes)    
-    } else {
+        const recipes = await recipesService.getById(req.params.id)
+        const recipeDataBase = await recipesService.getIdByDb(req.params.id)
+        if(recipes){
+            res.send(recipes)  
+        } else if(recipeDataBase){
+            res.send(recipeDataBase)  
+        } else {
         res.status(400).send('No id provided.')    
     }
-    
+}
 }catch(error){
     console.log(error);
     res.status(404).send('No encontramos tu receta')
