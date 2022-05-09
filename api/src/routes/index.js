@@ -8,9 +8,8 @@ const router = Router();
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
-
-router.get('/types', typesController.getTypes)
 router.get('/recipes', recipesController.getRecipes)
+router.get('/types', typesController.getTypes)
 router.get('/recipes', recipesController.getRecipesByName)
 router.get('/recipes/:id', recipesController.getRecipeById)
 router.post('/recipe', recipesController.createRecipe)

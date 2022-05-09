@@ -57,34 +57,41 @@ const getAllByName = async function(name){
     return allRecipe
 }
 
-const getById = async function(id){
+const getById = async function(recipeId){
+        
+    try {
+        if(typeof recipeId !== 'undefined') {
+            const apiById = await axios.get( `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${YOUR_API_KEY}`)
     
-   try {const apiById = await axios.get( `https://api.spoonacular.com/recipes/${id}/information?apiKey=${YOUR_API_KEY}`)
- 
-    let dataByApi = apiById.data;
-    let datosByApi = (dataByApi)=>{
-        return{
-            id: dataByApi.id,
-            name: dataByApi.title,
-            image: dataByApi.image,
-            type: dataByApi.diets.map(diet=>({name: diet})),
-            summary: dataByApi.summary,
-            spoonacularScore: dataByApi.spoonacularScore,
-            healthScore: dataByApi.healthScore,
-            instruction: dataByApi.instructions
-       }
+            let dataByApi = apiById.data;
+            let datosByApi = (dataByApi)=>{
+                return {
+                    id: dataByApi.id,
+                    name: dataByApi.title,
+                    image: dataByApi.image,
+                    type: dataByApi.diets.map(diet=>({name: diet})),
+                    summary: dataByApi.summary,
+                    spoonacularScore: dataByApi.spoonacularScore,
+                    healthScore: dataByApi.healthScore,
+                    instruction: dataByApi.instructions
+                }
+            }
+            return datosByApi(dataByApi)
+
+                
+            // } catch{
+            //     console.log(Error, 'error 1')
+            // }
+
+            // try{
+            let dataByDb = await Recipe.findByPk(id,{ raw: true });
+            return dataByDb
+        } else {
+            console.log('Recipe ID: '+recipeId)
+        }
+    }catch(error){
+        console.log(error)
     }
-    return datosByApi(dataByApi)
-    
-} catch{
-    console.log(Error, 'No se encontro en Api')
-}
-try{
-    let dataByDb = await Recipe.findByPk(id,{ raw: true });
-    return dataByDb
-}catch{
-    console.log(Error, 'No se encontro en Api')
-}
 
 //    let detailsOfRecipes = apiById.data.map(element =>
 //     { return {

@@ -1,7 +1,7 @@
 const recipesService = require('../services/recipes.services')
 
 const getRecipes = async function( req, res, next){
-    if(req.query.name) next()
+    if(req.query.name || req.params.id) next()
     else{
     try{const recipes = await recipesService.getRecipesApiDb()
     res.send(recipes)
@@ -19,14 +19,24 @@ const getRecipesByName = async function(req,res,next){
 }
 
 const getRecipeById = async function( req, res, next){
-
-try{const recipes = await recipesService.getById(req.params.id) // informacion que nos envia el cliente que es un objeto
-// console.log('ID:',req.params)
-console.log(recipes)
-res.send(recipes)
-}catch{
+    if( !req.params.id || req.query.name ) next()
+    else {
+     try{
+    if(req.params.id) {
+        const recipes = await recipesService.getById(req.params.id) // informacion que nos envia el cliente que es un objeto
+        // console.log('ID:',req.params)
+        console.log(recipes)
+        res.send(recipes)    
+    } else {
+        res.status(400).send('No id provided.')    
+    }
+    
+}catch(error){
+    console.log(error);
     res.status(404).send('No encontramos tu receta')
 }
+    }
+
     
     
 }
