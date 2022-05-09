@@ -46,12 +46,13 @@ const getAllByName = async function(name){
             if(recipe.name.includes(name)) return recipe
         })
     }
-   
+    
     let dbByName = await Recipe.findAll({ 
         where: 
             {name: Sequelize.where( Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + name + '%')},
         raw: true
         })
+        console.log(searchByName(name))
     let allRecipe = searchByName(name).concat(dbByName);
     return allRecipe
 }

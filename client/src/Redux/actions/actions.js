@@ -2,6 +2,7 @@ import axios from "axios";
 export const ALL_RECIPES = 'ALL_RECIPES';
 export const ALL_TYPES = 'ALL_TYPES';
 export const RECIPE_ID = 'RECIPE_ID';
+export const RECIPE_NAME = 'RECIPE_NAME';
 
 
 export function allTypes(){
@@ -39,7 +40,15 @@ export function recipeById(id){
         }).catch(Error=>console.log(Error))
     }
 }
-// export default {
-// allTypes,
-// allRecipes
-// }
+
+export function recipeByName(name){
+    return(dispatch)=>{
+        axios.get(`http://localhost:3001/recipes?name=${name}`)
+        .then(result=>{
+            return dispatch({
+                type: RECIPE_NAME,
+                payload: result.data
+            })
+        }).catch(Error=>console.log(Error))
+    }
+}

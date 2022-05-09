@@ -11,7 +11,7 @@ export default function RecipeCard({image ,name, type}){
                 <h2>{name}</h2>
                 <Link to='/recipes/:id'>
                 <div>{type}</div>
-                <button><DetailRecipe/></button>
+                <button><DetailRecipe/></button> 
                 </Link>
             </section>
         </div>
