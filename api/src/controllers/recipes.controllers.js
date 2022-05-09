@@ -21,26 +21,24 @@ const getRecipesByName = async function(req,res,next){
 const getRecipeById = async function( req, res, next){
     if( !req.params.id || req.query.name ) next()
     else {
-     try{
-    if(req.params.id) {
-        const recipes = await recipesService.getById(req.params.id)
-        const recipeDataBase = await recipesService.getIdByDb(req.params.id)
-        if(recipes){
-            res.send(recipes)  
-        } else if(recipeDataBase){
-            res.send(recipeDataBase)  
-        } else {
-        res.status(400).send('No id provided.')    
-    }
-}
-}catch(error){
-    console.log(error);
-    res.status(404).send('No encontramos tu receta')
-}
-    }
+        try {
+            let isNumber = req.params.id.match(/^[0-9]+$/) != null;
+            if(isNumber) {
+                const recipes = await recipesService.getById(req.params.id)
+                res.send(recipes)
+            } else {
+                const recipeDataBase = await recipesService.getIdByDb(req.params.id)
+                res.send(recipeDataBase)
+            }
+    //     {
+    //     res.status(400).send('No id provided.')    
+    // }
 
-    
-    
+        } catch(error) {
+            console.log(error);
+            res.status(404).send('No encontramos tu receta')
+        }
+    }
 }
 
 const createRecipe = async function( req, res, next){

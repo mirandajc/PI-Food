@@ -58,8 +58,10 @@ const getAllByName = async function(name){
 }
 
 const getIdByDb = async function (recipeId){
+   
     let dataByDb = await Recipe.findByPk(recipeId,{ raw: true });
     return dataByDb
+    
 }
 
 const getById = async function(recipeId){
@@ -83,13 +85,6 @@ const getById = async function(recipeId){
             }
             
             return datosByApi(dataByApi)
-
-                
-            // } catch{
-            //     console.log(Error, 'error 1')
-            // }
-
-            // try{
             
         } else {
             console.log('Recipe ID: '+recipeId)
