@@ -1,7 +1,7 @@
 const recipesService = require('../services/recipes.services')
 
 const getRecipes = async function( req, res, next){
-    if(req.query.name || req.params.id) next()
+    if(req.query.name || req.params.id) next() 
     else{
     try{const recipes = await recipesService.getRecipesApiDb()
     res.send(recipes)
@@ -22,7 +22,7 @@ const getRecipeById = async function( req, res, next){
     if( !req.params.id || req.query.name ) next()
     else {
         try {
-            let isNumber = req.params.id.match(/^[0-9]+$/) != null;
+            let isNumber = req.params.id.match(/^[0-9]+$/) != null; // solucion para el uuid
             if(isNumber) {
                 const recipes = await recipesService.getById(req.params.id)
                 res.send(recipes)

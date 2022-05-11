@@ -2,15 +2,17 @@
 
 module.exports = (sequelize) =>{
     sequelize.define('type', {
-        name: {
-            type: DataTypes.STRING
-        },
-        
-        id:{
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
-            allowNull: false
+            allowNull:false
+                },
+        name: {
+            type: DataTypes.STRING,
+            allowNull:false
         }
+    },{
+        timestamps: false
     });
 }

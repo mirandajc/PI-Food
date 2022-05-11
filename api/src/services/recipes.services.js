@@ -1,7 +1,8 @@
 require('dotenv').config();
-const {Recipe} = require('../db')
+const {Recipe, Type} = require('../db')
 const axios = require('axios');
 const { Sequelize } = require('sequelize');
+const { types } = require('pg');
 const {YOUR_API_KEY} = process.env;
 
 const getRecipesApiDb = async function() {
@@ -50,16 +51,32 @@ const getAllByName = async function(name){
     let dbByName = await Recipe.findAll({ 
         where: 
             {name: Sequelize.where( Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + name + '%')},
-        raw: true
-        })
-        console.log(searchByName(name))
+        // include: {
+        //     model: Type,
+        //     attributes: ["name"],
+        //     through: {
+        //         attributes: []
+        //     }}
+    })
+    
     let allRecipe = searchByName(name).concat(dbByName);
     return allRecipe
 }
 
 const getIdByDb = async function (recipeId){
    
-    let dataByDb = await Recipe.findByPk(recipeId,{ raw: true });
+    // let dataByDb = await Recipe.findByPk(recipeId,{ raw: true });
+
+    let dataByDb = await Recipe.findByPk( recipeId, {
+        include: {
+            model: Type,
+            attributes: ["name"],
+            through: {
+                attributes: [],
+            } 
+        }});
+    console.log("estoy aca:", dataByDb)
+
     return dataByDb
     
 }
@@ -95,19 +112,53 @@ const getById = async function(recipeId){
 
 }
 
-const create = async function( recipe ){
-    //const {name, image, summary, aggregateLikes, healthScore, instruction} = req.body;
-    let newRecipe = await Recipe.create({
-        name: recipe.name,
-        image: recipe.image,
-        summary: recipe.summary,
-        spoonacularScore: recipe.spoonacularScore,
-        aggregateLikes: recipe.aggregateLikes,
-        healthScore: recipe.healthScore,
-        instruction: recipe.instruction
-    })
-    return newRecipe
+const create = async function(recipe){
+    //const {name, image, summary, aggregateLikes, healthScore, instruction, types: ['','','' ]{name y id}} = req.body;
+    try {
+        let newRecipe = await Recipe.create({
+            name: recipe.name,
+            image: recipe.image,
+            summary: recipe.summary,
+            spoonacularScore: recipe.spoonacularScore,
+            aggregateLikes: recipe.aggregateLikes,
+            healthScore: recipe.healthScore,
+            instruction: recipe.instruction
+        })
+        await Promise.all(recipe.types?.map( async type =>{
+           await newRecipe.addType(
+               [(await Type.findOrCreate({
+                   where: {
+                       name: type
+                   }
+               }))[0].dataValues.id]
+           )
+        }))
+        
+        const recipeType = await Recipe.findOne({
+            where:{
+                name: recipe.name
+            },
+            include: {
+                model: Type,
+                attributes: ["name"],
+                through: {
+                    attributes: [],
+                } 
+            }
+        })
+       // console.log(typeDiet)
+        // const recipeTypes = recipe.types
+        // console.log(recipeTypes)
+        // await recipeTypes.map(type => newRecipe.addType(type));
+        // // await Promise.all(proms)
+        // return newRecipe
+        console.log(recipeType)
+        return recipeType
+    } catch(error) {
+        console.log(error, 'error en create')
+    }
 }
+    
 module.exports = {
     getRecipesApiDb,
     getAllByName,
