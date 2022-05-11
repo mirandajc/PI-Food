@@ -6,7 +6,6 @@ import { recipeById } from "../../Redux/actions/actions";
 export default function DetailRecipe(){
     
     const recipeDetail = useSelector(state => state.detail)
-    console.log(recipeDetail)
     const {id} = useParams();
     const dispatch = useDispatch();
 
@@ -24,8 +23,9 @@ export default function DetailRecipe(){
              <h4>{recipeDetail.spoonacularScore}</h4>
              <h4>Instruccion: {recipeDetail.instruction}</h4>
              <h4>Tipo de dieta:{recipeDetail.type?.map(diet => { 
+
                  return(
-                     <p>{diet.name}</p>
+                     <li key={Math.random().toString(36).substr(2, 9)} >{diet.name}</li>
                  ) })}</h4>
             </div> 
         </div>
