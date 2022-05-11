@@ -9,33 +9,65 @@ import Pagination from "../Pagination/Pagination";
 
 function Home(){
 
-    const {recipes, types} = useSelector(state => state)
-    console.log(recipes, types)
+
+    let {recipes, types} = useSelector(state => state)
     const dispatch = useDispatch()
 
     useEffect(()=>{
         dispatch(allRecipes())
     },[dispatch])
-    
+
+      useEffect(()=>{
+        dispatch(allTypes())
+    },[dispatch])
 
     //------Paginacion
     const [pag, setPag] = useState(1);
     const [recipesPag , setRecipesPag] = useState(9);
     const max = Math.ceil(recipes.length /recipesPag);
 
+    //------Ordenamiento a-z / z-a
+    const [list, setList] = useState('Order')
+    function handleSelect(e) {
+        console.log(e.target.val)
+        if(e.target.value === "A-Z"){
+            recipes = recipes.sort((a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0))
+            setList(e.target.value);
+            setPag(1)
+            setInput(input=1)
+        }else if(e.target.value === "Z-A" ){
+            recipes = recipes.sort((b, a) => (a.name > b.name ? 1 : a.name< b.name ? -1 : 0))
+            setList(e.target.value);
+            setPag(1)
+            setInput(input=1)
+        }
+        
+    }
+    //
+    let [input,setInput] = useState(1);
 
-    useEffect(()=>{
-        dispatch(allTypes())
-    },[dispatch])
+    // input onChange controlado // filter boton para recetar el orden por default 
 
-    //(a ,b)=> a.name.localeCompare(b.n ame) a-z
-    //(a ,b)=> b.name.localeCompare(a.name) z-a
+    function handlePagination(e) {
+        if(e.target.value <= max && e.target.value >= 0) {
+            setInput(input = e.target.value)
+            setPag(e.target.value)
+        } else {
+            alert(`El num de Pag deber ser mayor o igual a 1 y menor o igual a ${max}`)
+        }
+       
+    }
 
     return(
         <div>
                 <h2>Bienvenidos</h2>
                 <NavBar/>
-                <Pagination pag={pag} setPag={setPag} max={max} />
+                <Pagination pag={pag} setPag={setPag} max={max} input={input} setInput={setInput} handlePagination={handlePagination} />
+                <select value={list} onChange={(e)=> handleSelect(e)}>
+                    <option disabled selected >Order</option>
+                    <option >A-Z</option>
+                    <option >Z-A</option>
+                </select>
                 <div>
                 {recipes.slice(
                     (pag-1)* recipesPag, 
