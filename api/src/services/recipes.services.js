@@ -2,6 +2,8 @@ require('dotenv').config();
 const {Recipe, Type} = require('../db')
 const axios = require('axios');
 const { Sequelize } = require('sequelize');
+const Op = Sequelize.Op;
+
 //  const { types } = require('pg');
 const {YOUR_API_KEY} = process.env;
 
@@ -27,41 +29,49 @@ const getRecipesApiDb = async function() {
 }
 
 const getAllByName = async function(name){
+    try {
+        const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
+        
+        let recipesInfo = apiInfoRecipes.data?.results.map(element =>
+            { return {
+                id: element.id, 
+                name: element.title.toLowerCase().replace(/[^a-zA-Z 0-9.]+/g,''),
+                image: element.image,
+                type: element.diets.map(diet=>({name: diet}))
+                //summary: element.summary,
+                // spoonacularScore: element.spoonacularScore,
+                // healthScore: element.healthScore,
+                // instruction: element.analyzedInstructions[0]?.steps?.map(item => { return item.step + item.step}).toString(),
+            }});
+        
+        let searchByName = (name)=>{
+            return recipesInfo.filter(recipe => {
+                if(recipe.name.includes(name)) return recipe
+                // console.log(recipe)
+            })
+        }
+      
+        const dbByName = await Recipe.findAll({
+            where:{
+                name: {
+                    [Op.like]: `%${name}%`
+                }
+            },
+            include: {
+                model: Type,
+                attributes: ["name"],
+                through: {
+                    attributes: [],
+                } 
+            }
+        });
 
-     const apiInfoRecipes = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${YOUR_API_KEY}&addRecipeInformation=true&number=100`)
-     
-    let recipesInfo = apiInfoRecipes.data?.results.map(element =>
-         { return {
-            id: element.id, 
-            name: element.title.toLowerCase().replace(/[^a-zA-Z 0-9.]+/g,''),
-            image: element.image,
-            type: element.diets.map(diet=>({name: diet}))
-            //summary: element.summary,
-            // spoonacularScore: element.spoonacularScore,
-            // healthScore: element.healthScore,
-            // instruction: element.analyzedInstructions[0]?.steps?.map(item => { return item.step + item.step}).toString(),
-         }});
-       
-    let searchByName = (name)=>{
-        return recipesInfo.filter(recipe => {
-            if(recipe.name.includes(name)) return recipe
-            console.log(recipe)
-        })
+        let allRecipe = searchByName(name).concat(dbByName);
+        return allRecipe
+    } catch(error) {
+        console.log(error)
+        throw error
     }
-    
-    let dbByName = await Recipe.findAll({ 
-        where: 
-            {name: Sequelize.where( Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', '%' + name + '%')},
-        // include: {
-        //     model: Type,
-        //     attributes: ["name"],
-        //     through: {
-        //         attributes: []
-        //     }}
-    })
-    
-    let allRecipe = searchByName(name).concat(dbByName);
-    return allRecipe
 }
 
 const getIdByDb = async function (recipeId){

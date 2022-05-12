@@ -17,13 +17,13 @@ export default function CreateRecipe() {
         spoonacularScore: 0,
         healthScore: 0,
         instruction: '',    
-        type: [], // cambio s
+        types: [], // cambio s
     })
 
     function handleSelect(e) {
         setRecipe({
             ...recipe,
-            type: [...recipe.type, e.target.value] //cambio s
+            types: [...recipe.types, e.target.value] //cambio s
         })
     }
 
@@ -44,7 +44,7 @@ export default function CreateRecipe() {
             spoonacularScore: '',
             healthScore: '',
             instruction: '',
-            type: [], // cambio s
+            types: [], // cambio s
         })
     }
 
@@ -67,7 +67,7 @@ export default function CreateRecipe() {
             <label htmlFor="instruction">Instruction</label>
                 <textarea type="text" name="instruction" value={recipe.instruction} onChange={(e)=>{handleChange(e)}} />
             <select onChange={(e)=> handleSelect(e)}>
-                <option value='' name='type'>Diets Type</option>
+                <option value='' name='types'>Diets Type</option>
                 {typesDiets?.map(diet=>{
                     return (
                         <option value={diet.id} key={diet.id}>{diet.name}</option>
