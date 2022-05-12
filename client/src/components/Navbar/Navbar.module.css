@@ -1,0 +1,12 @@
+.logo{
+width: 8rem;
+border-radius: 3rem;
+
+}
+.button{
+    padding: 1em;
+    margin: 2rem;
+  border: none;
+  background: rgb(234, 235, 235);
+  cursor: pointer;
+}

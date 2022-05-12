@@ -51,21 +51,22 @@ const getAllByName = async function(name){
             })
         }
       
-        const dbByName = await Recipe.findAll({
+        let dbByName = await Recipe.findAll({
             where:{
                 name: {
                     [Op.like]: `%${name}%`
                 }
             },
-            include: {
-                model: Type,
-                attributes: ["name"],
-                through: {
-                    attributes: [],
-                } 
-            }
+            // include: {
+            //     model: Type,
+            //     attributes: ["name"],
+            //     through: {
+            //         attributes: [],
+            //     }
+            // }
         });
-
+        // dbByName = { type: dbByName?.types };
+        // delete dbByName.types;
         let allRecipe = searchByName(name).concat(dbByName);
         return allRecipe
     } catch(error) {

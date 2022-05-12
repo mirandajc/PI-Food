@@ -25,14 +25,14 @@ function Home(){
     
     const [typByRecipe , setTypeByRecipe] = useState(recipes)
     function handleSelectType(e) {  
-        console.log(e.target.value)
+        console.log(recipes)
         recipes = recipes.filter(recipe => {
             let diet = recipe.type?.map(d => d.name)
             if (diet.includes(e.target.value)){
                 return recipe 
             }
         })
-        console.log(recipes)
+        
         setTypeByRecipe(recipes)
         setPag(1)
         setInput(input=1)
