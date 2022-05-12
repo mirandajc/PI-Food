@@ -10,7 +10,6 @@ const getAll = async function(){
         
         let dataTypes = apiTypes.data?.results.map(obj => obj.diets).join([]).split(',');
         let diets = new Set(dataTypes);
-        console.log(apiTypes)
         let arr = Array.from(diets);
             return arr;
     }catch{

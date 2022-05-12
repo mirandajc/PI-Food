@@ -2,7 +2,7 @@ require('dotenv').config();
 const {Recipe, Type} = require('../db')
 const axios = require('axios');
 const { Sequelize } = require('sequelize');
-const { types } = require('pg');
+//  const { types } = require('pg');
 const {YOUR_API_KEY} = process.env;
 
 const getRecipesApiDb = async function() {
@@ -93,7 +93,7 @@ const getById = async function(recipeId){
                     id: dataByApi.id,
                     name: dataByApi.title,
                     image: dataByApi.image,
-                    type: dataByApi.diets.map(diet=>({name: diet})),
+                    types: dataByApi.diets.map(diet=>({name: diet})),
                     summary: dataByApi.summary,
                     spoonacularScore: dataByApi.spoonacularScore,
                     healthScore: dataByApi.healthScore,

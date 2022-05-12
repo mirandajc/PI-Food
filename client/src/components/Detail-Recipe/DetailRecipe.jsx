@@ -22,7 +22,7 @@ export default function DetailRecipe(){
              <h4>Puntaje Saludable: {recipeDetail.healthScore}</h4>
              <h4>{recipeDetail.spoonacularScore}</h4>
              <h4>Instruccion: {recipeDetail.instruction}</h4>
-             <h4>Tipo de dieta:{recipeDetail.type?.map(diet => { 
+             <h4>Tipo de dieta:{recipeDetail.types?.map(diet => { 
 
                  return(
                      <li key={Math.random().toString(36).substr(2, 9)} >{diet.name}</li>

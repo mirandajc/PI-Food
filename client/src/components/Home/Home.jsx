@@ -16,16 +16,42 @@ function Home(){
     useEffect(()=>{
         dispatch(allRecipes())
     },[dispatch])
-
-      useEffect(()=>{
+    
+    useEffect(()=>{
         dispatch(allTypes())
     },[dispatch])
-
+    
+    //---- filtro por type
+    
+    const [typByRecipe , setTypeByRecipe] = useState(recipes)
+    function handleSelectType(e) {  
+        console.log(e.target.value)
+        recipes = recipes.filter(recipe => {
+            let diet = recipe.type?.map(d => d.name)
+            if (diet.includes(e.target.value)){
+                return recipe 
+            }
+        })
+        console.log(recipes)
+        setTypeByRecipe(recipes)
+        setPag(1)
+        setInput(input=1)
+    }
+    
+    
     //------Paginacion
     const [pag, setPag] = useState(1);
     const [recipesPag , setRecipesPag] = useState(9);
-    const max = Math.ceil(recipes.length /recipesPag);
-
+    let [input,setInput] = useState(1);
+    const max = Math.ceil(typByRecipe?.length? typByRecipe.length/recipesPag : recipes.length /recipesPag);
+    function handlePagination(e) {
+        if(e.target.value <= max && e.target.value >= 0) {
+            setInput(input = e.target.value)
+            setPag(e.target.value)
+        } else {
+            alert(`El num de Pag deber ser mayor o igual a 1 y menor o igual a ${max}`)
+        }
+    }
     //------Ordenamiento a-z / z-a
     const [list, setList] = useState('Order')
     function handleSelect(e) {
@@ -37,27 +63,13 @@ function Home(){
             setInput(input=1)
         }else if(e.target.value === "Z-A" ){
             recipes = recipes.sort((b, a) => (a.name > b.name ? 1 : a.name< b.name ? -1 : 0))
-            setList(e.target.value);
+            setList(1);
             setPag(1)
             setInput(input=1)
         }
-        
-    }
-    //
-    let [input,setInput] = useState(1);
-
-    // input onChange controlado // filter boton para recetar el orden por default 
-
-    function handlePagination(e) {
-        if(e.target.value <= max && e.target.value >= 0) {
-            setInput(input = e.target.value)
-            setPag(e.target.value)
-        } else {
-            alert(`El num de Pag deber ser mayor o igual a 1 y menor o igual a ${max}`)
-        }
-       
     }
 
+     
     return(
         <div>
                 <h2>Bienvenidos</h2>
@@ -68,8 +80,25 @@ function Home(){
                     <option >A-Z</option>
                     <option >Z-A</option>
                 </select>
+                <select  onChange={(e)=> handleSelectType(e)}>
+                    <option>Filter by diet type</option>
+                    {types?.map(type=>{
+                    return (
+                        <option value={type.id} key={type.id}>{type.name}</option>
+                    )
+                })}
+                </select>
                 <div>
-                {recipes.slice(
+                    {typByRecipe?.length && typByRecipe.slice(
+                    (pag-1)* recipesPag, 
+                    (pag-1)* recipesPag+ recipesPag
+                )?.map(recipe => {
+                    return (
+                        <RecipeCard image={recipe.image} name={recipe.name} id={recipe.id} type={recipe.type?.map(diet =>  <p>{diet.name}</p> )} key={Math.random().toString(36).substr(2, 9)} ></RecipeCard>
+                        )
+                    })
+                }
+                {!typByRecipe?.length && recipes.slice(
                     (pag-1)* recipesPag, 
                     (pag-1)* recipesPag+ recipesPag
                 )?.map(recipe => {
