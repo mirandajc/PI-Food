@@ -45,6 +45,7 @@ const getAllByName = async function(name){
     let searchByName = (name)=>{
         return recipesInfo.filter(recipe => {
             if(recipe.name.includes(name)) return recipe
+            console.log(recipe)
         })
     }
     
