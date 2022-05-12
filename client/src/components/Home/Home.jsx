@@ -72,7 +72,6 @@ function Home(){
      
     return(
         <div>
-                <h2>Bienvenidos</h2>
                 <NavBar/>
                 <Pagination pag={pag} setPag={setPag} max={max} input={input} setInput={setInput} handlePagination={handlePagination} />
                 <select value={list} onChange={(e)=> handleSelect(e)}>

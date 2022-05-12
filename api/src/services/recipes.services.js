@@ -57,13 +57,13 @@ const getAllByName = async function(name){
                     [Op.like]: `%${name}%`
                 }
             },
-            // include: {
-            //     model: Type,
-            //     attributes: ["name"],
-            //     through: {
-            //         attributes: [],
-            //     }
-            // }
+            include: {
+                model: Type,
+                attributes: ["name"],
+                through: {
+                    attributes: [],
+                }
+            }
         });
         // dbByName = { type: dbByName?.types };
         // delete dbByName.types;

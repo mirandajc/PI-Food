@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom";
 import { allTypes, createRecipe } from "../../Redux/actions/actions";
 import Navbar from '../Navbar/Navbar'
 import styles from './CreateRecipe.module.css'
 
+
 export default function CreateRecipe() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const typesDiets = useSelector((state) => state.types)
     useEffect(()=>{
         dispatch(allTypes())
@@ -47,6 +50,7 @@ export default function CreateRecipe() {
             instruction: '',
             types: [], 
         })
+        navigate("/home")
     }
 
     const formulario = useRef(null)
